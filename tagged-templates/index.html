@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tagged Templates</title>
+    <style>
+      body {
+        display: flex;
+        margin: 0;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        font-family: system-ui;
+        background-color: #f49097;
+        color: #f2f5ff;
+        font-size: 2rem;
+        text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+      }
+      strong {
+        color: #f5e960;
+        padding: 0.15em 0.4em;
+        background-color: #dfb2f4;
+        border-radius: 20px;
+        border: 2px solid #f2f5ff;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function strongElement(expression) {
+        return `<strong>${expression}</strong>`;
+      }
+
+      function contentElement(content) {
+        return `<p>${content}</p>`;
+      }
+
+      function taggedTemplate(strings, ...expressions) {
+        if (!strings[0] && expressions.length === 0) {
+          return contentElement("Hello World!");
+        }
+        let newContent = "";
+        strings.forEach((string, index) => {
+          const strong = expressions[index]
+            ? strongElement(expressions[index])
+            : "";
+          newContent += `${string} ${strong}`;
+        });
+
+        return contentElement(newContent);
+      }
+
+      const mainContent = taggedTemplate`El ${"trabajo duro"} supera al ${"talento natural"}`;
+      document.body.innerHTML = mainContent;
+    </script>
+  </body>
+</html>
