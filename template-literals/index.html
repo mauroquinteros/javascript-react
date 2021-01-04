@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template Literals</title>
+  </head>
+  <body>
+    <h2>Template Literals</h2>
+    <script>
+      const name = "Mauro";
+      const age = "Mauro";
+      console.log(`My name is ${name}`);
+      console.log(`My age is ${age}`);
+      console.log(`This's course of ${"Javascript to React"}`);
+      console.log(`Variable's value is ${(x = "Mauro")}`);
+
+      // function name doesn't work in template literals
+      console.log(
+        `Variable's value is ${function name() {
+          return "Mauro";
+        }}`
+      );
+      console.log(
+        `Variable's value is ${(function () {
+          return "Mauro";
+        })()}`
+      );
+      console.log(
+        `Variable's value is ${(() => {
+          return "Mauro";
+        })()}`
+      );
+
+      // if statement doesn't work in template literals
+      // console.log(`Variable's value is ${if(true) { return "Mauro"}}`)
+      console.log(`Variable's value is ${true && "Mauro"}`);
+      console.log(`Variable's value is ${false ? "Mauro" : "Leonidas"}`);
+
+      console.log(
+        `Using map expression: ${["h1", "h2"].map((item) => `${item} element`)}`
+      );
+    </script>
+  </body>
+</html>
