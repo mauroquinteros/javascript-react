@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Functions</title>
+  </head>
+  <body>
+    <button id="btn-1">Click Function</button>
+    <button id="btn-2">Click Arrow Function</button>
+    <script>
+      const $btnFunction = document.querySelector("#btn-1");
+
+      // Toma su propio this, en este caso es el button
+      $btnFunction.addEventListener("click", function () {
+        console.log(this);
+        console.log(this.id);
+      });
+
+      // Toma el this superior, en este caso es el objeto window
+      const $btnArrow = document.querySelector("#btn-2");
+      $btnArrow.addEventListener("click", () => {
+        console.log(this);
+        console.log(this.id);
+      });
+
+      // Problemas en functions
+      // seg es NaN porque la función
+      function Time() {
+        this.seg = 0;
+        console.log(this); // this es Time
+        setInterval(function () {
+          console.log(this); // this es Window
+          this.seg++;
+          console.log(this.seg);
+        }, 1000);
+      }
+      // new Time();
+
+      // Indentación de funciones
+      function Time() {
+        const self = this;
+        self.seg = 0;
+        setInterval(function () {
+          self.seg++;
+          console.log(self.seg);
+        }, 1000);
+      }
+      // new Time();
+
+      // Solución usando Arrow Function
+      function Time() {
+        this.seg = 0;
+        console.log(this); // this es Time
+        setInterval(() => {
+          console.log(this); // this es Time
+          this.seg++;
+          console.log(this.seg);
+        }, 1000);
+      }
+      // new Time();
+    </script>
+  </body>
+</html>
