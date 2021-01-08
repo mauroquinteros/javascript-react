@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Styled Components</title>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      // API for styled components
+      // this fuction returns a taggled template with all styles
+      const styled = {
+        h1: function (styles) {
+          return function (content) {
+            return `
+              <h1 style="${styles}">
+                ${content}
+              </h1>
+            `;
+          };
+        },
+      };
+
+      // styled component
+      const TitleStyled = styled.h1`
+        font-family: system-ui;
+        font-size: 40px;
+        color: orange;
+        text-shadow: 1px 1px 0 black;
+      `;
+
+      // function to render the component
+      function render(component, container) {
+        container.innerHTML = component;
+      }
+
+      // function to create dynamic content
+      function component(strings, ...dynamicValues) {
+        return function (props) {
+          let newContent = [...strings];
+          dynamicValues.forEach((value, index) => {
+            newContent[index] += props[value];
+          });
+          console.log(newContent.join(""));
+          return newContent.join("");
+        };
+      }
+
+      const props = {
+        message: "No Te Rindas",
+        name: "Mauro",
+      };
+
+      // dynamic content
+      const Title = component`<marquee>Hey ${"name"}, ${"message"}</marquee>`(
+        props
+      );
+
+      render(TitleStyled(Title), window.container);
+    </script>
+  </body>
+</html>
