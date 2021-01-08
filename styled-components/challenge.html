@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Styled Components</title>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      // API for styled components
+      // this fuction returns a styled component
+      function createStyledApi(htmlTag) {
+        return (styles) => (content) => `
+          <${htmlTag} style="${styles}">${content}</${htmlTag}>
+        `;
+      }
+
+      // all tags available for the API
+      const tags = ["h1", "h2", "h3", "p", "div"];
+
+      // create a global object to access all styled components
+      function createObjectStyled(tags) {
+        return tags.reduce((acc, tag) => {
+          return {
+            ...acc,
+            [tag]: createStyledApi(tag),
+          };
+        }, {});
+      }
+
+      // function to render the component
+      function render(component, container) {
+        container.innerHTML = component;
+      }
+
+      // function to create dynamic content
+      function component(strings, ...values) {
+        return function (props) {
+          let newContent = strings.slice();
+          values.forEach((value, index) => {
+            newContent[index] += props[value];
+          });
+          return newContent.join("");
+        };
+      }
+
+      // this is the main object that contains all styled components
+      const styled = createObjectStyled(tags);
+      console.log(styled);
+
+      // create the style component
+      const TitleStyled = styled.h3`
+        color: orange;
+        font-family: system-ui;
+        font-size: 30px;
+        text-shadow: 1px 1px 0 black;
+      `;
+
+      const props = {
+        firstName: "Mauro",
+        lastName: "Quinteros",
+      };
+
+      // dynamic content
+      const TitleContent = component`Hello ${"firstName"} ${"lastName"}`(props);
+
+      // add content inside the styled component
+      const TitleComponent = TitleStyled(TitleContent);
+      render(TitleComponent, window.container);
+    </script>
+  </body>
+</html>
