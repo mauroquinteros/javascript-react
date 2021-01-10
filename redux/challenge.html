@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Quemador de calorías</title>
+  </head>
+  <body>
+    <main>
+      <div class="wrapper">
+        <details>
+          <summary>⭐️ explicación</summary>
+          <p>
+            El libro, Convert Anything to Calories, llegó a la conclusión de
+            que, en promedio, una persona con un dedo indice de 10.8 cm^3 y de
+            11.7 gramos necesitará muuuchos clicks para conservar la línea. Se
+            requieren 16.7 micromoles de adenosín trifosfato (la molécula que
+            transporta energía entre las células) para mover un gramo del cuerpo
+            por un segundo, y como hay 7.3 calorías en un mol (la medida de
+            cantidad de una sustancia) de adenosín trifosfato, en teoría, cada
+            click del mouse debería quemar 1.42 calorías. Aunque el cálculo
+            asume el movimiento de todo el músculo, por lo que la cantidad real
+            puede variar un poco.
+          </p>
+          <p>
+            Pero resulta que es sábado y tienes hambre. treinta minutos después
+            te llega una pizza (1,835kCal) con una coca (97kCal), tendrías que
+            hacer 1,360,563 clicks para quemar la cena. Y cómo es sábado
+            seguramente involucrará unas cuantas bebidas alcohólicas: en un Gin
+            & Tonic (120kCal) hay 84,507 clicks, y 131,690.14 por cada cerveza
+            que consumas. En otras palabras, con 427 clicks en promedio por día,
+            la computadora no es un buen ejercicio.
+          </p>
+        </details>
+        <h1>Quemador de calorías</h1>
+        <p class="result" id="result"></p>
+        <button id="burn" class="burn">🔥</button>
+        <p class="result result-mini" id="counter"></p>
+      </div>
+    </main>
+    <script>
+      const createStore = (reducer, initialState) => {
+        let state = initialState;
+        let updater = () => {};
+
+        const getState = () => state;
+        const dispatch = (action) => {
+          state = reducer(state, action);
+          console.log(state);
+          updater();
+        };
+        const subscribe = (listener) => {
+          updater = listener;
+        };
+        return {
+          getState,
+          dispatch,
+          subscribe,
+        };
+      };
+
+      // revisa la acción que le mande a dispatch y actualiza el estado
+      const reducer = (state, action) => {
+        switch (action.type) {
+          case "BURN":
+            let calorias = state.calorias + action.payload;
+            let counter = state.counter - calorias;
+            return {
+              calorias,
+              counter,
+            };
+            break;
+          default:
+            return state;
+            break;
+        }
+      };
+
+      // 1. inicializo mi estado global
+      const store = createStore(reducer, {
+        calorias: 0,
+        counter: 1360563,
+      });
+
+      // 2. suscribo una función que se ejecutará cuando cambie el estado
+      store.subscribe(() => {
+        const { calorias, counter } = store.getState();
+        window.result.textContent = `Has quemado ${calorias.toFixed(
+          2
+        )} calorías`;
+        window.counter.textContent = `Te falta quemar ${counter.toFixed(
+          2
+        )} calorías`;
+      });
+
+      // 3. creo un evento click que ejecutará el dispatch y actualizará el estado
+      const burn = () => {
+        store.dispatch({
+          type: "BURN",
+          payload: 1.42,
+        });
+      };
+      window.burn.addEventListener("click", burn);
+    </script>
+  </body>
+</html>
